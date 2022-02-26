@@ -10,7 +10,11 @@ const requestListenter = (req, res) => {
         case "/todos":
           return getTodos();
         case "/":
-          return { code: 200, defaultHeaders, content: "服務正常運作中" };
+          return {
+            code: 200,
+            headers: defaultHeaders,
+            content: "服務正常運作中",
+          };
         default:
           handleError(404, res);
           return;

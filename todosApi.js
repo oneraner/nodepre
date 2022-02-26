@@ -3,7 +3,11 @@ import defaultHeaders from "./corsHeaders.js";
 import handleError from "./error.js";
 import { v4 as uuidv4 } from "uuid";
 
-export const getTodos = () => ({ code: 200, defaultHeaders, content: todos });
+export const getTodos = () => ({
+  code: 200,
+  headers: defaultHeaders,
+  content: todos,
+});
 
 export const postTodos = (req, res) => {
   let body = "";
