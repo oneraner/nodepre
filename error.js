@@ -1,4 +1,4 @@
-import { headers } from "./server.js";
+import defaultHeaders from "./corsHeaders.js";
 
 const errorCodeList = [400, 404];
 const errorResContent = code => {
@@ -21,8 +21,10 @@ const errorResContent = code => {
   }
 };
 
-export const handleError = code => {
+export const handleError = (code, res) => {
   if (!errorCodeList.includes(code)) return;
-  return { code, headers, content: errorResContent(code) };
+  res.writeHead(code, defaultHeaders);
+  res.write(JSON.stringify(errorResContent(code)));
+  res.end();
 };
 export default handleError;

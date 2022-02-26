@@ -1,9 +1,9 @@
 import todos from "./todoData.js";
-import { headers } from "./server.js";
+import defaultHeaders from "./corsHeaders.js";
 import handleError from "./error.js";
 import { v4 as uuidv4 } from "uuid";
 
-export const getTodos = () => ({ code: 200, headers, content: todos });
+export const getTodos = () => ({ code: 200, defaultHeaders, content: todos });
 
 export const postTodos = (req, res) => {
   let body = "";
@@ -12,21 +12,15 @@ export const postTodos = (req, res) => {
     try {
       const data = JSON.parse(body);
       if (!data.title || !data.content) {
-        const errorObfect = handleError(400);
-        res.writeHead(errorObfect.code, errorObfect.headers);
-        res.write(JSON.stringify(errorObfect.content));
-        res.end();
+        handleError(400, res);
         return;
       }
       todos.push({ ...data, id: uuidv4() });
-      res.writeHead(200, headers);
+      res.writeHead(200, defaultHeaders);
       res.write(JSON.stringify(todos));
       res.end();
     } catch {
-      const errorObfect = handleError(400);
-      res.writeHead(errorObfect.code, errorObfect.headers);
-      res.write(JSON.stringify(errorObfect.content));
-      res.end();
+      handleError(400, res);
     }
   });
 };
@@ -38,22 +32,21 @@ export const updateTodos = (req, res) => {
     try {
       const data = JSON.parse(body);
       if (!data.id || !data.title) {
-        const errorObfect = handleError(400);
-        res.writeHead(errorObfect.code, errorObfect.headers);
-        res.write(JSON.stringify(errorObfect.content));
-        res.end();
+        handleError(400, res);
         return;
       }
       const index = todos.findIndex(todo => todo.id === data.id);
+      if (index === -1) {
+        handleError(400, res);
+        return;
+      }
       todos.splice(index, 1, data);
-      res.writeHead(200, headers);
+      res.writeHead(200, defaultHeaders);
       res.write(JSON.stringify(todos));
       res.end();
     } catch {
-      const errorObfect = handleError(400);
-      res.writeHead(errorObfect.code, errorObfect.headers);
-      res.write(JSON.stringify(errorObfect.content));
-      res.end();
+      handleError(400, res);
+      return;
     }
   });
 };
@@ -66,7 +59,8 @@ export const deleteTodos = (req, res) => {
   }
   const index = todos.findIndex(todo => todo.id === id);
   if (index === -1) {
-    return handleError(400);
+    handleError(400, res);
+    return;
   } else {
     todos.splice(index, 1);
     return { code: 200, headers, content: todos };

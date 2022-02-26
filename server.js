@@ -1,14 +1,7 @@
 import http from "http";
 import { postTodos, getTodos, deleteTodos, updateTodos } from "./todosApi.js";
 import { handleError } from "./error.js";
-
-export const headers = {
-  "Access-Control-Allow-Headers":
-    "Content-Type,Authorization,Content-Length,X-Resqueted-With",
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "PATCH,POST,GET,OPTIONS,DELETE",
-  "Content-Type": "application/json",
-};
+import defaultHeaders from "./corsHeaders.js";
 
 const requestListenter = (req, res) => {
   if (req.method === "GET") {
@@ -17,9 +10,10 @@ const requestListenter = (req, res) => {
         case "/todos":
           return getTodos();
         case "/":
-          return { code: 200, headers, content: "服務正常運作中" };
+          return { code: 200, defaultHeaders, content: "服務正常運作中" };
         default:
-          return handleError(404);
+          handleError(404, res);
+          return;
       }
     };
     const resquest = handleResquest();
@@ -36,7 +30,7 @@ const requestListenter = (req, res) => {
         }
 
       default:
-        res.writeHead(404, headers);
+        res.writeHead(404, defaultHeaders);
         res.write(
           JSON.stringify({
             status: "false",
@@ -47,16 +41,19 @@ const requestListenter = (req, res) => {
     }
   } else if (req.method === "DELETE") {
     const handleResquest = () => {
-      if (req.url.startsWith("/todo")) {
+      if (req.url.startsWith("/todos")) {
         return deleteTodos(req, res);
       } else {
-        return handleError(404);
+        handleError(404, res);
+        return;
       }
     };
     const resquest = handleResquest();
-    res.writeHead(resquest.code, resquest.headers);
-    res.write(JSON.stringify(resquest.content));
-    res.end();
+    if (resquest) {
+      res.writeHead(resquest.code, resquest.headers);
+      res.write(JSON.stringify(resquest.content));
+      res.end();
+    }
   }
   res.end();
 };
