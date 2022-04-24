@@ -1,17 +1,17 @@
 {
 	"info": {
 		"_postman_id": "9f2cf28e-93e5-41e4-8d06-4646ca3911d1",
-		"name": "heroku todo",
+		"name": "heroku posts",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
-			"name": "get todos",
+			"name": "get posts",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://warm-cliffs-81033.herokuapp.com/todos",
+					"raw": "https://warm-cliffs-81033.herokuapp.com/posts",
 					"protocol": "https",
 					"host": [
 						"warm-cliffs-81033",
@@ -19,20 +19,20 @@
 						"com"
 					],
 					"path": [
-						"todos"
+						"posts"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "post new todo",
+			"name": "post new post",
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"title\": \"test dataaaaa\",\r\n    \"content\": \"mock test bbbbb\"\r\n}",
+					"raw": "{\r\n    \"username\": \"jeff\",\r\n    \"content\": \"mock test bbbbb\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -40,7 +40,7 @@
 					}
 				},
 				"url": {
-					"raw": "https://warm-cliffs-81033.herokuapp.com/todos",
+					"raw": "https://warm-cliffs-81033.herokuapp.com/posts",
 					"protocol": "https",
 					"host": [
 						"warm-cliffs-81033",
@@ -48,19 +48,19 @@
 						"com"
 					],
 					"path": [
-						"todos"
+						"posts"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "delete all todos",
+			"name": "delete post",
 			"request": {
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "https://warm-cliffs-81033.herokuapp.com/todos/all",
+					"raw": "https://warm-cliffs-81033.herokuapp.com/posts/ec9b77fe-0068-42f5-ba51-e37e9a5f5f60",
 					"protocol": "https",
 					"host": [
 						"warm-cliffs-81033",
@@ -68,28 +68,7 @@
 						"com"
 					],
 					"path": [
-						"todos",
-						"all"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "delete one todo",
-			"request": {
-				"method": "DELETE",
-				"header": [],
-				"url": {
-					"raw": "https://warm-cliffs-81033.herokuapp.com/todos/ec9b77fe-0068-42f5-ba51-e37e9a5f5f60",
-					"protocol": "https",
-					"host": [
-						"warm-cliffs-81033",
-						"herokuapp",
-						"com"
-					],
-					"path": [
-						"todos",
+						"posts",
 						"ec9b77fe-0068-42f5-ba51-e37e9a5f5f60"
 					]
 				}
@@ -97,13 +76,13 @@
 			"response": []
 		},
 		{
-			"name": "update todo",
+			"name": "update post",
 			"request": {
 				"method": "PATCH",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n        \"title\": \"ccccccccc\",\r\n        \"content\": \"ddddddd\",\r\n        \"id\": \"1b1a936d-d521-4790-8a20-22c05b1458f3\"\r\n    }",
+					"raw": "{\r\n    \"content\": \"ddddddd\",\r\n    \"id\": \"1b1a936d-d521-4790-8a20-22c05b1458f3\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -111,7 +90,7 @@
 					}
 				},
 				"url": {
-					"raw": "https://warm-cliffs-81033.herokuapp.com/todos",
+					"raw": "https://warm-cliffs-81033.herokuapp.com/posts",
 					"protocol": "https",
 					"host": [
 						"warm-cliffs-81033",
@@ -119,7 +98,7 @@
 						"com"
 					],
 					"path": [
-						"todos"
+						"posts"
 					]
 				}
 			},
