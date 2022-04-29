@@ -13,19 +13,11 @@ router.get("/posts", (req, res) => {
 });
 
 router.post("/posts", (req, res) => {
-  let body = "";
-  req.on("data", chunk => {
-    body += chunk;
-  });
-  req.on("end", () => postPost({ body, req, res }));
+  postPost({ req, res });
 });
 
 router.patch("/posts", (req, res) => {
-  let body = "";
-  req.on("data", chunk => {
-    body += chunk;
-  });
-  req.on("end", () => updatePost({ body, req, res }));
+  updatePost({ req, res });
 });
 
 router.delete("/posts/:id", (req, res) => {

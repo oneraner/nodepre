@@ -6,9 +6,9 @@ export const getPost = async ({ req, res }) => {
   handleSuccess(res, data);
 };
 
-export const postPost = async ({ body, req, res }) => {
+export const postPost = async ({ req, res }) => {
   try {
-    const data = JSON.parse(body);
+    const data = req.body;
     if (data.content) {
       const post = await postModel.create({
         userName: data.username,
@@ -23,9 +23,9 @@ export const postPost = async ({ body, req, res }) => {
   }
 };
 
-export const updatePost = async ({ body, req, res }) => {
+export const updatePost = async ({ req, res }) => {
   try {
-    const data = JSON.parse(body);
+    const data = req.body;
     if (data.id) {
       const updatePost = await postModel.findByIdAndUpdate(data.id, data, {
         new: true,
