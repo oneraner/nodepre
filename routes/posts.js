@@ -16,7 +16,7 @@ router.post("/posts", (req, res) => {
   postPost({ req, res });
 });
 
-router.patch("/posts", (req, res) => {
+router.patch("/posts/:id", (req, res) => {
   updatePost({ req, res });
 });
 

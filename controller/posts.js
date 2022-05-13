@@ -1,8 +1,12 @@
 import postModel from "../model/posts.js";
+import userModel from "../model/user.js";
 import { handleSuccess, handleError } from "../utils/handleRes.js";
 
 export const getPost = async ({ req, res }) => {
-  const data = await postModel.find({});
+  const data = await postModel.find().populate({
+    path: "user",
+    select: "name photo",
+  });
   handleSuccess(res, data);
 };
 
@@ -11,7 +15,7 @@ export const postPost = async ({ req, res }) => {
     const data = req.body;
     if (data.content) {
       const post = await postModel.create({
-        userName: data.username,
+        userName: data.userName,
         content: data.content,
       });
       handleSuccess(res, post);
@@ -26,10 +30,15 @@ export const postPost = async ({ req, res }) => {
 export const updatePost = async ({ req, res }) => {
   try {
     const data = req.body;
-    if (data.id) {
+    const { id } = req.params;
+    if (id && data.content) {
       const updatePost = await postModel.findByIdAndUpdate(data.id, data, {
         new: true,
+        runValidators: true,
       });
+      if (!updatePost) {
+        handleError(res, "找不到符合的id");
+      }
       handleSuccess(res, updatePost);
     } else {
       handleError(res, "更新失敗");
