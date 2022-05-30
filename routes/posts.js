@@ -1,4 +1,5 @@
 import express from "express";
+import { handleErrorAsync } from "../utils/handleErrorAsync.js";
 import {
   getPost,
   postPost,
@@ -8,20 +9,32 @@ import {
 
 const router = express.Router();
 
-router.get("/posts", (req, res) => {
-  getPost({ req, res });
-});
+router.get(
+  "/posts",
+  handleErrorAsync(async (req, res, next) => {
+    getPost({ req, res, next });
+  })
+);
 
-router.post("/posts", (req, res) => {
-  postPost({ req, res });
-});
+router.post(
+  "/posts",
+  handleErrorAsync(async (req, res, next) => {
+    postPost({ req, res, next });
+  })
+);
 
-router.patch("/posts/:id", (req, res) => {
-  updatePost({ req, res });
-});
+router.patch(
+  "/posts/:id",
+  handleErrorAsync(async (req, res, next) => {
+    updatePost({ req, res, next });
+  })
+);
 
-router.delete("/posts/:id", (req, res) => {
-  deletePost({ req, res });
-});
+router.delete(
+  "/posts/:id",
+  handleErrorAsync(async (req, res, next) => {
+    deletePost({ req, res, next });
+  })
+);
 
 export default router;

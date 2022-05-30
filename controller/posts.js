@@ -1,6 +1,7 @@
 import postModel from "../model/posts.js";
 import userModel from "../model/user.js";
-import { handleSuccess, handleError } from "../utils/handleRes.js";
+import { handleSuccess } from "../utils/handleRes.js";
+import { CustomError } from "../utils/handleErrorAsync.js";
 
 export const getPost = async ({ req, res }) => {
   const data = await postModel.find().populate({
@@ -10,50 +11,40 @@ export const getPost = async ({ req, res }) => {
   handleSuccess(res, data);
 };
 
-export const postPost = async ({ req, res }) => {
-  try {
-    const data = req.body;
-    if (data.content) {
-      const post = await postModel.create({
-        userName: data.userName,
-        content: data.content,
-      });
-      handleSuccess(res, post);
-    } else {
-      handleError(res, "發表失敗");
-    }
-  } catch (error) {
-    handleError(res, error);
+export const postPost = async ({ req, res, next }) => {
+  const data = req.body;
+  if (data.content) {
+    const post = await postModel.create({
+      user: req.user._id,
+      content: data.content,
+      image: data.image,
+      comments: data.comments,
+    });
+    handleSuccess(res, post);
+  } else {
+    next(CustomError(res, "發表失敗", next));
   }
 };
 
-export const updatePost = async ({ req, res }) => {
-  try {
-    const data = req.body;
-    const { id } = req.params;
-    if (id && data.content) {
-      const updatePost = await postModel.findByIdAndUpdate(data.id, data, {
-        new: true,
-        runValidators: true,
-      });
-      if (!updatePost) {
-        handleError(res, "找不到符合的id");
-      }
-      handleSuccess(res, updatePost);
-    } else {
-      handleError(res, "更新失敗");
+export const updatePost = async ({ req, res, next }) => {
+  const data = req.body;
+  const { id } = req.params;
+  if (id && data.content) {
+    const updatePost = await postModel.findByIdAndUpdate(data.id, data, {
+      new: true,
+      runValidators: true,
+    });
+    if (!updatePost) {
+      return next(CustomError(res, "找不到ID", next));
     }
-  } catch (error) {
-    handleError(res, error);
+    handleSuccess(res, updatePost);
+  } else {
+    next(CustomError(res, "更新失敗", next));
   }
 };
 
 export const deletePost = async ({ req, res }) => {
-  try {
-    const { id } = req.params;
-    const deletePost = await postModel.findByIdAndDelete(id);
-    handleSuccess(res, deletePost);
-  } catch (error) {
-    handleError(res, error);
-  }
+  const { id } = req.params;
+  const deletePost = await postModel.findByIdAndDelete(id);
+  handleSuccess(res, deletePost);
 };
