@@ -1,6 +1,7 @@
 import express from "express";
 import connectDB from "./db.js";
 import postRoute from "./routes/posts.js";
+import userRoute from "./routes/users.js";
 import cors from "cors";
 import dotenv from "dotenv";
 import logger from "morgan";
@@ -15,7 +16,8 @@ process.on("uncaughtException", err => {
 dotenv.config({ path: "./config.env" });
 app.use(logger("dev"));
 app.use(express.json());
-app.use("/", postRoute);
+app.use("/posts", postRoute);
+app.use("/users", userRoute);
 const resErrorProd = (err, res) => {
   if (err.isOperational) {
     res.status(err.statusCode).json({

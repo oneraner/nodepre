@@ -1,5 +1,5 @@
 import postModel from "../model/posts.js";
-import userModel from "../model/user.js";
+import userModel from "../model/users.js";
 import { handleSuccess } from "../utils/handleRes.js";
 import { CustomError } from "../utils/handleErrorAsync.js";
 
@@ -22,7 +22,7 @@ export const postPost = async ({ req, res, next }) => {
     });
     handleSuccess(res, post);
   } else {
-    next(CustomError(res, "發表失敗", next));
+    return next(CustomError(400, "發表失敗", next));
   }
 };
 
@@ -35,11 +35,11 @@ export const updatePost = async ({ req, res, next }) => {
       runValidators: true,
     });
     if (!updatePost) {
-      return next(CustomError(res, "找不到ID", next));
+      return next(CustomError(400, "找不到ID", next));
     }
     handleSuccess(res, updatePost);
   } else {
-    next(CustomError(res, "更新失敗", next));
+    return next(CustomError(400, "更新失敗", next));
   }
 };
 
