@@ -13,9 +13,10 @@ export const getPost = async ({ req, res }) => {
 
 export const postPost = async ({ req, res, next }) => {
   const data = req.body;
+  const { _id } = req.user;
   if (data.content) {
     const post = await postModel.create({
-      user: req.user._id,
+      user: _id,
       content: data.content,
       image: data.image,
       comments: data.comments,
